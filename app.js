@@ -3,8 +3,17 @@ const express = require('express')
 const app = express()
 const port = 3000
 
+//Setting template engine as handlebars
+const exphbs = require('express-handlebars');
 
-var requestTime = function (req, res, next) {
+app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
+app.set('view engine', 'hbs')
+
+
+//I.ConsoleMessage middleware
+var consoleMessage =function (req,res,next){
+  
+  //Step IA.Get timestamp
   req.requestTime = new Date();
   
   //Get year,month,day,hour,min,seconds
@@ -38,45 +47,59 @@ if(mm<10)
 {
     sec='0'+sec;
 } 
-
-//return all values  with this string array
+  //return all time unit values  within this string array
   req.requestTime = yyyy+'-'+mm+'-'+dd+' '+hr+':'+min+':'+sec;
-  next()
-}
 
-
-var httpMethod = function (req, res, next) {
+  //Step IB.Obtain http method
   req.httpMethod = req.method;
-  next()
-}
-
-var routesUrl = function (req, res, next) {
+  
+  //Step IC.Obtain Url
   req.routesUrl = req.url;
-  next()
+  
+  //Step ID.Combine these 3 params together before using it
+  req.consoleMessage = req.requestTime +' | '+req.httpMethod+' from '+req.routesUrl;  
+  next();
 }
 
 
-app.use(requestTime)
-app.use(httpMethod)
-app.use(routesUrl)
+//Step IE.Using middleware
+app.use(consoleMessage);
 
+//   GET /
 app.get('/', (req, res) => {
-
-    var responseText = req.requestTime +' | '+req.httpMethod+' from '+req.routesUrl;
-   
-  res.send(responseText)
+  const text ='列出全部Todo';
+  //Display console Message on index.hbs
+  var msg = req.consoleMessage
+ 
+  //Console out message
+  console.log(req.consoleMessage)
+  res.render('index',{text,msg})
 })
 
+//GET /new
 app.get('/new', (req, res) => {
-  res.send('新增 Todo 頁面')
+  const text = '新增 Todo 頁面';
+  var msg = req.consoleMessage
+  console.log(req.consoleMessage)
+  res.render('index',{text,msg})
 })
  
+//GET :/id
 app.get('/:id', (req, res) => {
-  res.send('顯示一筆 Todo')
+  const text ='顯示一筆 Todo' ;
+  var msg = req.consoleMessage
+  console.log(req.consoleMessage)
+  res.render('index',{text,msg})
+ 
 })
 
+//New  create post
 app.post('/', (req, res) => {
-  res.send('新增一筆  Todo')
+  const text ='新增一筆 Todo';
+  var msg = req.consoleMessage
+  console.log(req.consoleMessage)
+  res.render('index',{text,msg})
+ 
 })
 
 app.listen(port, () => {
