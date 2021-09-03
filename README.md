@@ -23,8 +23,8 @@ git clone https://github.com/Rottie/Middleware.git
 
 
 3B.Enter project Directory
-cd Middleware
 
+cd Middleware
 
 3C.Instal node modules
 npm install express express-handlebars
