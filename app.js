@@ -9,6 +9,9 @@ const exphbs = require('express-handlebars');
 app.engine('hbs', exphbs({ defaultLayout: 'main', extname: '.hbs' }))
 app.set('view engine', 'hbs')
 
+//Include statics files like images and css
+app.use(express.static('public'))
+
 
 //I.ConsoleMessage middleware
 var consoleMessage =function (req,res,next){
@@ -68,37 +71,32 @@ app.use(consoleMessage);
 //   GET /
 app.get('/', (req, res) => {
   const text ='列出全部Todo';
-  //Display console Message on index.hbs
-  var msg = req.consoleMessage
  
   //Console out message
   console.log(req.consoleMessage)
-  res.render('index',{text,msg})
+  res.render('index',{text})
 })
 
 //GET /new
 app.get('/new', (req, res) => {
   const text = '新增 Todo 頁面';
-  var msg = req.consoleMessage
   console.log(req.consoleMessage)
-  res.render('index',{text,msg})
+  res.render('index',{text})
 })
  
 //GET :/id
 app.get('/:id', (req, res) => {
   const text ='顯示一筆 Todo' ;
-  var msg = req.consoleMessage
   console.log(req.consoleMessage)
-  res.render('index',{text,msg})
+  res.render('index',{text})
  
 })
 
 //New  create post
 app.post('/', (req, res) => {
   const text ='新增一筆 Todo';
-  var msg = req.consoleMessage
   console.log(req.consoleMessage)
-  res.render('index',{text,msg})
+  res.render('index',{text})
  
 })
 
